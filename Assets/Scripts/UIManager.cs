@@ -6,6 +6,7 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
+    public GameObject slot;
     [Header("Title Scene Properties", order = 0)]
     [Space(2f)]
     [Header("Intro Scene Properties", order = 1)]
@@ -16,8 +17,22 @@ public class UIManager : MonoBehaviour
     [Header("Tutorial Scene Properties", order = 2)]
     [Space(2f)]
     [Header("Level01 Scene Properties", order = 3)]
+    public TMP_Text levelIntroText;
+    public TMP_Text taskText;
+    public TMP_Text inputText1;
+    public TMP_Text inputText2;
+    public TMP_Text outputText;
+    public GameObject startButton;
+    public GameObject goButton;
+    public GameObject hintButton;
+    public GameObject andGate;
+    public GameObject orGate;
+    public GameObject notGate;
+    public GameObject emptySlot;
+    public GameObject gatePieces;
 
     int introSequenceCount;
+    int levelSequenceCount;
     Scene currentScene;
 
     private void Start()
@@ -39,6 +54,7 @@ public class UIManager : MonoBehaviour
             case "02TutorialScene":
                 break;
             case "03Level01Scene":
+                InitializeLevel();
                 break;
         }
     }
@@ -165,5 +181,74 @@ public class UIManager : MonoBehaviour
             "Learn about logic gates by putting together \"logic machines\" of your own!";
         introImage.SetActive(true);
         backButton.SetActive(false);
+    }
+
+    void InitializeLevel()
+    {
+        goButton.SetActive(false);
+        hintButton.SetActive(false);
+        andGate.SetActive(false);
+        orGate.SetActive(false);
+        notGate.SetActive(false);
+        emptySlot.SetActive(false);
+        gatePieces.SetActive(false);
+    }
+
+    //set up first exercise
+    public void BeginLevel()
+    {
+        goButton.SetActive(true);
+        hintButton.SetActive(true);
+        startButton.SetActive(false);
+        levelIntroText.text = "";
+        SetLevelExercise();
+    }
+
+    /* checks if current exercise is done correctly
+     * if not, restart exercise
+     * if so, show congratulations screen and set up next exercise
+     */
+    public void CheckWork()
+    {
+        string currGate = slot.GetComponent<Slot>().currentGate;
+        switch(levelSequenceCount)
+        {
+            case 0:
+                //right answer
+                if (currGate.Equals("GateOr"))
+                {
+                    Debug.Log("yay!");
+                }
+                //else if wrong answer
+                else
+                {
+                    Debug.Log("no :(");
+                }
+                break;
+        }
+    }
+
+    //display hint to player
+    public void ShowHint()
+    {
+
+    }
+
+    void SetLevelExercise()
+    {
+        switch(levelSequenceCount)
+        {
+            case 0:
+                //first exercise - inputs 0,1 / output 1 / answer: OR gate
+                taskText.text = "Using the input and output provided below, please place the correct logic gate to complete the circuit so it produces the desired output.";
+                inputText1.text = "0";
+                inputText2.text = "1";
+                outputText.text = "1";
+                andGate.SetActive(true);
+                orGate.SetActive(true);
+                gatePieces.SetActive(true);
+                emptySlot.SetActive(true);
+                break;
+        }
     }
 }
