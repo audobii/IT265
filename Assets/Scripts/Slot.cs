@@ -14,7 +14,7 @@ public class Slot : MonoBehaviour, IDropHandler
             eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
             currentGate = eventData.pointerDrag.GetComponent<RectTransform>().name;
             Debug.Log(currentGate);
-        }
+        } 
     }
 
 }

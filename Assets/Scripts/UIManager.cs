@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 
+/* Todo list
+ * organize functions
+ * find way to make answer checking more optimal?
+ */
+
 public class UIManager : MonoBehaviour
 {
     public GameObject slot;
@@ -22,6 +27,7 @@ public class UIManager : MonoBehaviour
     public TMP_Text inputText1;
     public TMP_Text inputText2;
     public TMP_Text outputText;
+    public TMP_Text explanationText;
     public GameObject startButton;
     public GameObject goButton;
     public GameObject hintButton;
@@ -30,14 +36,18 @@ public class UIManager : MonoBehaviour
     public GameObject notGate;
     public GameObject emptySlot;
     public GameObject gatePieces;
+    public GameObject hintScreen;
+    public GameObject winScreen;
+    public GameObject loseScreen;
 
     int introSequenceCount;
     int levelSequenceCount;
+    Vector3 andGateDefaultPos;
+    Vector3 orGateDefaultPos;
     Scene currentScene;
 
     private void Start()
     {
-
     }
 
     private void Awake()
@@ -192,6 +202,8 @@ public class UIManager : MonoBehaviour
         notGate.SetActive(false);
         emptySlot.SetActive(false);
         gatePieces.SetActive(false);
+        andGateDefaultPos = andGate.GetComponent<RectTransform>().position;
+        orGateDefaultPos = orGate.GetComponent<RectTransform>().position;
     }
 
     //set up first exercise
@@ -207,6 +219,7 @@ public class UIManager : MonoBehaviour
     /* checks if current exercise is done correctly
      * if not, restart exercise
      * if so, show congratulations screen and set up next exercise
+     * CAN CONDENSE THIS? into another function?
      */
     public void CheckWork()
     {
@@ -217,13 +230,52 @@ public class UIManager : MonoBehaviour
                 //right answer
                 if (currGate.Equals("GateOr"))
                 {
-                    Debug.Log("yay!");
+                    Debug.Log("Correct!");
+                    levelSequenceCount++;
+                    explanationText.text = "OR is the correct gate since using AND requires both inputs to be 1 in order to output 1.\n" +
+                        "With the OR gate, you only need one input to be 1 to output 1.";
+                    winScreen.SetActive(true);
                 }
                 //else if wrong answer
                 else
                 {
-                    Debug.Log("no :(");
+                    Debug.Log("Incorrect");
+                    loseScreen.SetActive(true);
                 }
+                break;
+            case 1:
+                if (currGate.Equals("GateAnd") || currGate.Equals("GateOr"))
+                {
+                    Debug.Log("Correct!");
+                    levelSequenceCount++;
+                    explanationText.text = "Either the AND or OR gate can work here, since both inputs are 1.\n" +
+                        "An AND gate will give 1 only when both inputs are 1. As long as either input is 1, OR works too.";
+                    winScreen.SetActive(true);
+                }
+                //else if wrong answer
+                else
+                {
+                    Debug.Log("Incorrect");
+                    loseScreen.SetActive(true);
+                }
+                break;
+            case 2:
+                if (currGate.Equals("GateAnd"))
+                {
+                    Debug.Log("Correct!");
+                    levelSequenceCount++;
+                    explanationText.text = "AND is the correct gate since using OR would output a 1 (because if at least one input is 1 and our gate is OR, our out will be 1).\n" +
+                        "Here we wanted our output to be 0, and since both inputs aren't 1, we will get a 0 from using an AND gate.";
+                    winScreen.SetActive(true);
+                }
+                //else if wrong answer
+                else
+                {
+                    Debug.Log("Incorrect");
+                    loseScreen.SetActive(true);
+                }
+                break;
+            case 3:
                 break;
         }
     }
@@ -231,16 +283,26 @@ public class UIManager : MonoBehaviour
     //display hint to player
     public void ShowHint()
     {
-
+        hintScreen.SetActive(true);
     }
 
-    void SetLevelExercise()
+    //return to game, exit hint
+    public void ExitHint()
     {
-        switch(levelSequenceCount)
+        hintScreen.SetActive(false);
+    }
+
+    public void SetLevelExercise()
+    {
+        winScreen.SetActive(false);
+        loseScreen.SetActive(false);
+        andGate.transform.position = andGateDefaultPos;
+        orGate.transform.position = orGateDefaultPos;
+        switch (levelSequenceCount)
         {
             case 0:
                 //first exercise - inputs 0,1 / output 1 / answer: OR gate
-                taskText.text = "Using the input and output provided below, please place the correct logic gate to complete the circuit so it produces the desired output.";
+                taskText.text = "Using the input and output provided below, please place the correct logic gate in the empty ? space to complete the circuit so it produces the desired output.";
                 inputText1.text = "0";
                 inputText2.text = "1";
                 outputText.text = "1";
@@ -248,6 +310,36 @@ public class UIManager : MonoBehaviour
                 orGate.SetActive(true);
                 gatePieces.SetActive(true);
                 emptySlot.SetActive(true);
+                break;
+            case 1:
+                //second exercise - inputs 1,1 / output 1 / answer: AND gate or OR gate
+                inputText1.text = "1";
+                inputText2.text = "1";
+                outputText.text = "1";
+                andGate.SetActive(true);
+                orGate.SetActive(true);
+                break;
+            case 2:
+                //third exercise - inputs 1,0 / output 0 / answer: AND gate
+                taskText.text = "Using the input and output provided below, please place the correct logic gate in the empty ? space to complete the circuit so it produces the desired output. (Pay attention to the output this time!)";
+                inputText1.text = "1";
+                inputText2.text = "0";
+                outputText.text = "0";
+                break;
+            case 3:
+                //end
+                levelIntroText.text = "Thanks for playing!";
+                taskText.text = "";
+                inputText1.text = "";
+                inputText2.text = "";
+                outputText.text = "";
+                goButton.SetActive(false);
+                hintButton.SetActive(false);
+                andGate.SetActive(false);
+                orGate.SetActive(false);
+                notGate.SetActive(false);
+                emptySlot.SetActive(false);
+                gatePieces.SetActive(false);
                 break;
         }
     }

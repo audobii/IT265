@@ -238,6 +238,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec7c944963739b843b9b6930e3ffc8a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slot: {fileID: 0}
+  introText: {fileID: 0}
+  introImage: {fileID: 0}
+  backButton: {fileID: 0}
+  nextButton: {fileID: 0}
+  levelIntroText: {fileID: 0}
+  taskText: {fileID: 0}
+  inputText1: {fileID: 0}
+  inputText2: {fileID: 0}
+  outputText: {fileID: 0}
+  explanationText: {fileID: 0}
+  startButton: {fileID: 0}
+  goButton: {fileID: 0}
+  hintButton: {fileID: 0}
+  andGate: {fileID: 0}
+  orGate: {fileID: 0}
+  notGate: {fileID: 0}
+  emptySlot: {fileID: 0}
+  gatePieces: {fileID: 0}
+  hintScreen: {fileID: 0}
+  winScreen: {fileID: 0}
+  loseScreen: {fileID: 0}
 --- !u!1 &70912560
 GameObject:
   m_ObjectHideFlags: 0
@@ -1362,7 +1384,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.7924528, g: 0.17568529, b: 0.4668117, a: 1}
+  m_Color: {r: 0.17647056, g: 0.2385413, b: 0.7921569, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
