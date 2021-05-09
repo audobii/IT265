@@ -21,6 +21,26 @@ public class UIManager : MonoBehaviour
     public GameObject nextButton;
     [Header("Tutorial Scene Properties", order = 2)]
     [Space(2f)]
+    public TMP_Text tutorialIntroTitleText;
+    public TMP_Text tutorialIntroText;
+    public TMP_Text tutText;
+    public GameObject beginTutorialButton;
+    public GameObject tutBackButton;
+    public GameObject tutNextButton;
+    public GameObject imageBits;
+    public GameObject imageLogicGateEx;
+    public GameObject imageTruthTables;
+    public GameObject imageLogicGates;
+    public GameObject andGateT;
+    public GameObject orGateT;
+    public GameObject emptySlotT;
+    public GameObject gatePiecesT;
+    public GameObject goButtonT;
+    public GameObject incorrectOverlay;
+    public GameObject overlay;
+    public GameObject tutTextBox;
+    public GameObject tutTextBoxNextButton;
+    public GameObject tutTextBoxBackButton;
     [Header("Level01 Scene Properties", order = 3)]
     public TMP_Text levelIntroText;
     public TMP_Text taskText;
@@ -39,9 +59,13 @@ public class UIManager : MonoBehaviour
     public GameObject hintScreen;
     public GameObject winScreen;
     public GameObject loseScreen;
+    public GameObject output0;
+    public GameObject output1;
 
     int introSequenceCount;
+    int tutorialSequenceCount;
     int levelSequenceCount;
+    int tutTextCount;
     Vector3 andGateDefaultPos;
     Vector3 orGateDefaultPos;
     Scene currentScene;
@@ -62,6 +86,7 @@ public class UIManager : MonoBehaviour
                 InitializeIntro();
                 break;
             case "02TutorialScene":
+                InitializeTutorial();
                 break;
             case "03Level01Scene":
                 InitializeLevel();
@@ -84,6 +109,30 @@ public class UIManager : MonoBehaviour
     {
         introSequenceCount++;
         SetIntroSequence();
+    }
+
+    public void TutorialSequenceBack()
+    {
+        tutorialSequenceCount--;
+        SetTutorialSequence();
+    }
+
+    public void TutorialSequenceNext()
+    {
+        tutorialSequenceCount++;
+        SetTutorialSequence();
+    }
+
+    public void TutorialTextBack()
+    {
+        tutTextCount--;
+        TutTextCycle();
+    }
+
+    public void TutorialTextNext()
+    {
+        tutTextCount++;
+        TutTextCycle();
     }
 
     void SetIntroSequence()
@@ -183,14 +232,132 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void SetTutorialSequence()
+    {
+        incorrectOverlay.SetActive(false);
+        switch(tutorialSequenceCount)
+        {
+            case 0:
+                InitializeTutorial();
+                break;
+            case 1:
+                tutorialIntroText.fontSize = 22;
+                tutorialIntroTitleText.text = "First, let's go over the concept of \"bits\"!";
+                tutorialIntroText.text = "\n\n\n\n\n\nA bit is the smallest unit of storage on the computer. \"Bit\" is short for binary digit.\n" +
+                    "Bits have a value of either 0 or 1. It can only have one of these two states.\n" +
+                    "It's like how something can be either on or off, open or closed, true or false - bits are either 0 or 1.\n" +
+                    "Used together, bits can be used to store or communicate information, or various other things.";
+                beginTutorialButton.SetActive(false);
+                tutNextButton.SetActive(true);
+                tutBackButton.SetActive(false);
+                imageBits.SetActive(true);
+                imageLogicGateEx.SetActive(false);
+                break;
+            case 2:
+                tutorialIntroText.fontSize = 22;
+                tutorialIntroTitleText.text = "Next, let's look at logic gates.";
+                tutorialIntroText.text = "\n\n\n\nLogic gates help electronic devices do their tasks, which can be complex. In a way, they help computers \"think\" by using logic and making it easier to do what they need to.\n" +
+                    "\nA logic gate takes in some bits as an input. It will then output one bit based on these inputs.\n" +
+                    "You can picture it as a machine that takes in bits, looks at them, and spits out one bit for you to have.";
+                tutBackButton.SetActive(true);
+                imageBits.SetActive(false);
+                imageLogicGateEx.SetActive(true);
+                imageLogicGates.SetActive(false);
+                break;
+            case 3:
+                tutorialIntroTitleText.text = "Here are some examples of logic gates!";
+                tutorialIntroText.text = "\n\n\n\nAND gates output 1 if and only if both inputs are 1. Otherwise, it will output a 0." +
+                    "\nOR gates output 1 when at least one input is 1. Otherwise, it will output a 0." + 
+                    "\nNOT gates will output the opposite of their input. They INVERSE their input. So, if the input is 1, it will output 0, and vice versa.";
+                imageLogicGateEx.SetActive(false);
+                imageTruthTables.SetActive(false);
+                imageLogicGates.SetActive(true);
+                break;
+            case 4:
+                tutorialIntroText.fontSize = 22;
+                tutorialIntroTitleText.text = "Truth tables can help you understand and predict the output of certain logic gate matchups.";
+                tutorialIntroText.text = "\n\nDepending on the input, logic gates will give a certain output. Truth tables show you the different combinations of inputs and the output based on the logic gate. Here are some examples using the logic gates we already talked about!";
+                imageTruthTables.SetActive(true);
+                imageLogicGates.SetActive(false);
+                break;
+            case 5:
+                tutorialIntroText.fontSize = 32;
+                tutorialIntroTitleText.text = "Let's put it all together!";
+                tutorialIntroText.text = "\n\n\nIn this game, we will be making \"logic machines\"! These logic machines will help you learn how to use bits and logic gates. Click the \"next\" button to continue!";
+                imageTruthTables.SetActive(false);
+                tutBackButton.SetActive(true);
+                break;
+            case 6:
+                //show how to use the game
+                gatePiecesT.SetActive(true);
+                andGateT.SetActive(true);
+                orGateT.SetActive(true);
+                emptySlotT.SetActive(true);
+                goButtonT.SetActive(true);
+                tutTextBox.SetActive(true);
+                tutBackButton.SetActive(false);
+                tutNextButton.SetActive(false);
+                incorrectOverlay.SetActive(false);
+                tutTextBoxNextButton.SetActive(true);
+                tutTextBoxBackButton.SetActive(false);
+                overlay.SetActive(true);
+                tutorialIntroTitleText.text = "";
+                tutorialIntroText.text = "";
+                tutText.text = "This is what the game looks like! Below is a \"logic machine\" you need to help put together. The input and output bits are already there for you at the right and left respectively. The logic gates AND and OR are at the bottom.";
+                break;
+            case 7:
+                gatePiecesT.SetActive(false);
+                andGateT.SetActive(false);
+                orGateT.SetActive(false);
+                emptySlotT.SetActive(false);
+                goButtonT.SetActive(false);
+                tutTextBox.SetActive(false);
+                tutNextButton.SetActive(true);
+                tutorialIntroTitleText.text = "That's correct!";
+                tutorialIntroText.text = "\n\n\n\nEither logic gate would have been correct.\n" +
+                    "For the AND gate, both input bits were NOT 1, so it would output a 0 in this case.\n" +
+                    "For the OR gate, there needs to be at least one input bit that is 1, but both were 0 in this case, so it would output 0 as well.\n" +
+                    "Click the next button to continue.";
+                break;
+            case 8:
+                //congrats u finished tutorial
+                tutNextButton.SetActive(false);
+                tutorialIntroTitleText.text = "Congratulations! You finished the tutorial!";
+                tutorialIntroText.text = "\n\n\nYou're ready to play the game. Press the home button to go back to the menu and play Level 01. Feel free to come back to this tutorial at any time if you need help!";
+                break;
+        }
+    }
+
     void InitializeIntro()
     {
         introText.fontSize = 24;
         introText.horizontalAlignment = HorizontalAlignmentOptions.Center;
         introText.text = "Welcome to Logic Gate Game!\n\n" +
-            "Learn about logic gates by putting together \"logic machines\" of your own!";
+            "Learn about logic gates by putting together \"logic machines\" of your own!" +
+            "(Remember, there can be more than one correct answer!)";
         introImage.SetActive(true);
         backButton.SetActive(false);
+    }
+
+    void InitializeTutorial()
+    {
+        tutorialIntroText.fontSize = 32;
+        tutorialIntroTitleText.text = "Welcome to the tutorial!";
+        tutorialIntroText.text = "Before playing the game, let's go over some basic concepts and how to play!";
+        beginTutorialButton.SetActive(true);
+        tutNextButton.SetActive(false);
+        tutBackButton.SetActive(false);
+        imageBits.SetActive(false);
+        imageLogicGateEx.SetActive(false);
+        imageTruthTables.SetActive(false);
+        imageLogicGates.SetActive(false);
+        gatePiecesT.SetActive(false);
+        andGateT.SetActive(false);
+        orGateT.SetActive(false);
+        emptySlotT.SetActive(false);
+        goButtonT.SetActive(false);
+        incorrectOverlay.SetActive(false);
+        overlay.SetActive(false);
     }
 
     void InitializeLevel()
@@ -202,6 +369,8 @@ public class UIManager : MonoBehaviour
         notGate.SetActive(false);
         emptySlot.SetActive(false);
         gatePieces.SetActive(false);
+        output0.SetActive(false);
+        output1.SetActive(false);
         andGateDefaultPos = andGate.GetComponent<RectTransform>().position;
         orGateDefaultPos = orGate.GetComponent<RectTransform>().position;
     }
@@ -216,10 +385,51 @@ public class UIManager : MonoBehaviour
         SetLevelExercise();
     }
 
+    // used to check if tutorial was completed correctly
+    public void CheckTutorial()
+    {
+        string currGate = slot.GetComponent<Slot>().currentGate;
+        if(currGate.Equals("GateOr") || currGate.Equals("GateAnd"))
+        {
+            tutorialSequenceCount++;
+            SetTutorialSequence();
+        } else
+        {
+            incorrectOverlay.SetActive(true);
+        }
+    }
+
+    public void TutTextCycle()
+    {
+        switch(tutTextCount)
+        {
+            case 0:
+                tutText.text = "This is what the game looks like! Below is a \"logic machine\" you need to help put together. The input and output bits are already there for you at the right and left respectively. The logic gates AND and OR are at the bottom.";
+                tutTextBoxNextButton.SetActive(true);
+                tutTextBoxBackButton.SetActive(false);
+                break;
+            case 1:
+                tutText.text = "This machine is incomplete. Our input is two bits that are both 0, and our output is also 0. Use your previous knowledge to finish this logic machine! (There can be more than one right answer!)";
+                tutTextBoxNextButton.SetActive(true);
+                tutTextBoxBackButton.SetActive(true);
+                break;
+            case 2:
+                tutText.text = "To complete this logic machine, use your Left Mouse Button to click, hold, and drag one of the logic gates to the empty slot with a question mark in the middle. To remove it, click and drag again and move it outside of the slot.";
+                tutTextBoxNextButton.SetActive(true);
+                tutTextBoxBackButton.SetActive(true);
+                break;
+            case 3:
+                tutText.text = "Good luck! When you're ready, click the GO! button to check your work.";
+                tutTextBoxNextButton.SetActive(false);
+                tutTextBoxBackButton.SetActive(true);
+                overlay.SetActive(false);
+                break;
+        }
+    }
+
     /* checks if current exercise is done correctly
      * if not, restart exercise
      * if so, show congratulations screen and set up next exercise
-     * CAN CONDENSE THIS? into another function?
      */
     public void CheckWork()
     {
@@ -264,7 +474,7 @@ public class UIManager : MonoBehaviour
                 {
                     Debug.Log("Correct!");
                     levelSequenceCount++;
-                    explanationText.text = "AND is the correct gate since using OR would output a 1 (because if at least one input is 1 and our gate is OR, our out will be 1).\n" +
+                    explanationText.text = "AND is the correct gate since using OR would output a 1 (because if at least one input is 1 and our gate is OR, our output will be 1).\n" +
                         "Here we wanted our output to be 0, and since both inputs aren't 1, we will get a 0 from using an AND gate.";
                     winScreen.SetActive(true);
                 }
@@ -305,7 +515,9 @@ public class UIManager : MonoBehaviour
                 taskText.text = "Using the input and output provided below, please place the correct logic gate in the empty ? space to complete the circuit so it produces the desired output.";
                 inputText1.text = "0";
                 inputText2.text = "1";
-                outputText.text = "1";
+                //outputText.text = "1";
+                output0.SetActive(false);
+                output1.SetActive(true);
                 andGate.SetActive(true);
                 orGate.SetActive(true);
                 gatePieces.SetActive(true);
@@ -315,7 +527,9 @@ public class UIManager : MonoBehaviour
                 //second exercise - inputs 1,1 / output 1 / answer: AND gate or OR gate
                 inputText1.text = "1";
                 inputText2.text = "1";
-                outputText.text = "1";
+                //outputText.text = "1";
+                output0.SetActive(false);
+                output1.SetActive(true);
                 andGate.SetActive(true);
                 orGate.SetActive(true);
                 break;
@@ -324,7 +538,9 @@ public class UIManager : MonoBehaviour
                 taskText.text = "Using the input and output provided below, please place the correct logic gate in the empty ? space to complete the circuit so it produces the desired output. (Pay attention to the output this time!)";
                 inputText1.text = "1";
                 inputText2.text = "0";
-                outputText.text = "0";
+                //outputText.text = "0";
+                output0.SetActive(true);
+                output1.SetActive(false);
                 break;
             case 3:
                 //end
@@ -340,6 +556,8 @@ public class UIManager : MonoBehaviour
                 notGate.SetActive(false);
                 emptySlot.SetActive(false);
                 gatePieces.SetActive(false);
+                output0.SetActive(false);
+                output1.SetActive(false);
                 break;
         }
     }
