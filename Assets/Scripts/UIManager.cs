@@ -283,7 +283,7 @@ public class UIManager : MonoBehaviour
             case 5:
                 tutorialIntroText.fontSize = 32;
                 tutorialIntroTitleText.text = "Let's put it all together!";
-                tutorialIntroText.text = "\n\n\nIn this game, we will be making \"logic machines\"! These logic machines will help you learn how to use bits and logic gates. Click the \"next\" button to continue!";
+                tutorialIntroText.text = "\n\n\nIn this game, we will be making \"logic machines\"! These logic machines will help you learn how to use bits and logic gates together. Click the \"next\" button to continue!";
                 imageTruthTables.SetActive(false);
                 tutBackButton.SetActive(true);
                 break;
