@@ -395,6 +395,7 @@ public class UIManager : MonoBehaviour
             SetTutorialSequence();
         } else
         {
+            tutTextCount = 0;
             incorrectOverlay.SetActive(true);
         }
     }
